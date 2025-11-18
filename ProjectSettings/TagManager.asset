@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 3
+  tags:
+  - Spike
+  - Apple
+  - Fall
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - Ground
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: object
+    uniqueID: 2567699895
+    locked: 0
+  - name: enemy
+    uniqueID: 3602330809
+    locked: 0
+  - name: Tiles
+    uniqueID: 1519649679
+    locked: 0
+  - name: player
+    uniqueID: 3192073711
+    locked: 0
+  m_RenderingLayers:
+  - Default
