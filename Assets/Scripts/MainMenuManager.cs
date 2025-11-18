@@ -17,7 +17,7 @@ public class MainMenuManager : MonoBehaviour
     public void Playbutton()
     {
         //play sfx
-        AudioManager.instance.PlaySfx(uiClickedSfx);
+        AudioManager.instance.PlaySfx(uiClickedSfx, 0.4f);
         //load level1
         SceneManager.LoadScene("Level1");
 

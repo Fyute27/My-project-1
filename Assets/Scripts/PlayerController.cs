@@ -55,7 +55,7 @@ public class PlayerController : MonoBehaviour
       {
         //landing frame
         
-        AudioManager.instance.PlaySfx(landingSound);
+        AudioManager.instance.PlaySfx(landingSound, 0.5f);
       }
       isGrounded = G;
 
@@ -65,7 +65,7 @@ public class PlayerController : MonoBehaviour
 
       if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
       {
-        AudioManager.instance.PlaySfx(jumpSound);
+        AudioManager.instance.PlaySfx(jumpSound, 0.5f);
         _rb.linearVelocity = new Vector2(_rb.linearVelocity.x, jumpForce);
       }
     }

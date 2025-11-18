@@ -29,13 +29,15 @@ public class AudioManager : MonoBehaviour
         musicSource.Play();
     }
 
-    public void PlaySfx(AudioClip clip)
+    public void PlaySfx(AudioClip clip, float volume)
     {
+        sfxSource.volume = volume;
         //sfxSource.clip = clip;
         //sfxSource.loop = false;
         //sfxSource.Play();
         //or
         sfxSource.PlayOneShot(clip);
+        
     }
     
     
