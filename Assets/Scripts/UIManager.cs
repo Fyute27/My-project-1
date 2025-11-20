@@ -20,12 +20,12 @@ public class UIManager : MonoBehaviour
 
     public void Restart()
     {
-        SceneManager.LoadScene("Level1");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // active current scene and then find buildindex
     }
     
     public void Next()
     {
-        SceneManager.LoadScene("Level2");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex +1); // active next scence with +1 and then find buildindex
     }
 
     public void MainMenu()
@@ -49,4 +49,5 @@ public class UIManager : MonoBehaviour
     {
         applesinLevel1Text.text = count.ToString();
     }
+    
 }

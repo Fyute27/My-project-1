@@ -10,99 +10,127 @@ using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour
 {
-   private Rigidbody2D _rb;
+  private Rigidbody2D _rb;
 
-   public float speed;
-   public float  jumpForce;
-   public Transform groundCheck;
-   public LayerMask groundLayer;
-   public bool canMove = true;
-   public bool isGrounded;
-   public AudioClip jumpSound;
-   public AudioClip landingSound;
-   
-   
-   private Animator _animator;
-   private float _moveX;
-   private CapsuleCollider2D _collider;
-   
-   
-   
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+  public float speed;
+  public float jumpForce;
+  public Transform groundCheck;
+  public LayerMask groundLayer;
+  public bool canMove = true;
+  public bool isGrounded;
+  public AudioClip jumpSound;
+  public AudioClip landingSound;
+  public ParticleSystem walkParticles;
+
+
+  private Animator _animator;
+  private float _moveX;
+  private CapsuleCollider2D _collider;
+
+
+
+  // Start is called once before the first execution of Update after the MonoBehaviour is created
+  void Start()
+  {
+    _rb = GetComponent<Rigidbody2D>();
+    _animator = GetComponent<Animator>();
+    _collider = GetComponent<CapsuleCollider2D>();
+  }
+
+  void Update()
+  {
+    if (canMove)
     {
-      _rb = GetComponent<Rigidbody2D>();
-      _animator = GetComponent<Animator>();
-      _collider = GetComponent<CapsuleCollider2D>();
+      HandleMovement();
+      HandleAnimation();
+      FlipSprite();
+      HandleWalkParticles();
     }
+
+  }
+
+  private void HandleWalkParticles()
+  {
+    if (_rb.linearVelocity.x != 0) 
+    {
+      walkParticles.Play();
+    }
+
+    else
+    {
+      walkParticles.Stop();
+    }
+  }
+
+  private void HandleMovement()
+  {
+    var G = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
+
+    if (!isGrounded && G)
+    {
+      //landing frame
+
+      AudioManager.instance.PlaySfx(landingSound, 0.5f);
+    }
+
+    isGrounded = G;
+
+
+    _moveX = Input.GetAxis("Horizontal"); // if A or left arrow -1, if D or right arrow +1, if nothing 0.
+    _rb.linearVelocity = new Vector2(_moveX * speed, _rb.linearVelocity.y);
     
-    void Update()
+
+    if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
     {
-      if (canMove)
-      {
-        HandleMovement();
-        HandleAnimation();
-        FlipSprite();
-      }
-      
+      AudioManager.instance.PlaySfx(jumpSound, 0.5f);
+      _rb.linearVelocity = new Vector2(_rb.linearVelocity.x, jumpForce);
+    }
+  }
+
+  private void HandleAnimation()
+  {
+    _animator.SetBool("isRunning", _moveX != 0); // if player is moving true.
+    _animator.SetBool("isRising", _rb.linearVelocity.y > 0 && !isGrounded); // if player is jumping.
+    _animator.SetBool("isFalling", _rb.linearVelocity.y < 0 && !isGrounded); // if player is falling. 
+  }
+
+  private void FlipSprite()
+  {
+    if (_moveX < 0)
+    {
+      transform.localScale = new Vector3(-2, transform.localScale.y, transform.localScale.z);
     }
 
-    private void HandleMovement()
+    else if (_moveX > 0)
     {
-      var G = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
-      
-      if (!isGrounded && G)
-      {
-        //landing frame
-        
-        AudioManager.instance.PlaySfx(landingSound, 0.5f);
-      }
-      isGrounded = G;
+      transform.localScale = new Vector3(2, transform.localScale.y, transform.localScale.z);
+    }
+  }
 
-     
-      _moveX  = Input.GetAxis("Horizontal"); // if A or left arrow -1, if D or right arrow +1, if nothing 0.
-      _rb.linearVelocity = new Vector2(_moveX * speed, _rb.linearVelocity.y);
-
-      if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
-      {
-        AudioManager.instance.PlaySfx(jumpSound, 0.5f);
-        _rb.linearVelocity = new Vector2(_rb.linearVelocity.x, jumpForce);
-      }
+  private void OnTriggerEnter2D(Collider2D other)
+  {
+    if (other.CompareTag("Finish"))
+    {
+      UIManager.instance.Win();
+      canMove = false;
+      _animator.SetBool("isRunning", false);
     }
 
-    private void HandleAnimation()
-    {
-      _animator.SetBool("isRunning", _moveX !=0); // if player is moving true.
-      _animator.SetBool("isRising", _rb.linearVelocity.y >0 && !isGrounded); // if player is jumping.
-      _animator.SetBool("isFalling", _rb.linearVelocity.y <0 && !isGrounded); // if player is falling. 
-    }
+  }
 
-    private void FlipSprite()
+  private void OnCollisionEnter2D(Collision2D other)
+  {
+    if (other.gameObject.CompareTag("MovingBox"))
     {
-      if (_moveX < 0)
-      {
-        transform.localScale = new Vector3(-2, transform.localScale.y, transform.localScale.z);
-      }
-      
-      else if (_moveX > 0)
-      {
-        transform.localScale = new Vector3(2, transform.localScale.y, transform.localScale.z);
-      }
+      transform.parent = other.transform;
     }
+  }
 
-    private void OnTriggerEnter2D(Collider2D other)
+  private void OnCollisionExit2D(Collision2D other)
+  {
+    if (other.gameObject.CompareTag("MovingBox"))
     {
-      if (other.CompareTag("Finish"))
-      {
-        UIManager.instance.Win();
-        canMove = false;
-        _animator.SetBool("isRunning", false);
-      }
-      
-      
+      transform.parent = null;
     }
-    
-    
-  
-    
+  }
 }

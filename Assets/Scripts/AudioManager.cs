@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour
@@ -20,7 +21,7 @@ public class AudioManager : MonoBehaviour
     }
 
     public AudioSource musicSource;
-    public AudioSource sfxSource;
+    public GameObject sfxSourcePrefab;
 
     public void PlayMusic(AudioClip clip)
     {
@@ -29,16 +30,30 @@ public class AudioManager : MonoBehaviour
         musicSource.Play();
     }
 
-    public void PlaySfx(AudioClip clip, float volume)
+    public void PlaySfx(AudioClip clip, float volume = 0.5f)
     {
+        var sfxSourceObject = Instantiate(sfxSourcePrefab, transform);
+        var sfxSource = sfxSourceObject.GetComponent<AudioSource>();
         sfxSource.volume = volume;
         //sfxSource.clip = clip;
         //sfxSource.loop = false;
         //sfxSource.Play();
         //or
         sfxSource.PlayOneShot(clip);
-        
+        Destroy(sfxSourceObject, clip.length);
     }
+    
+    public void StopMusic()
+    {
+        musicSource.Stop();
+    }
+
+    public void ResumeMusic()
+    {
+        musicSource.Play();
+    }
+
+   
     
     
 }

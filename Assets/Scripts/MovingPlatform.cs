@@ -3,10 +3,13 @@ using UnityEngine;
 
 public class MovingPlatform : MonoBehaviour
 {
-    public Transform movingTarget;
-
+    public Transform pointA;
+    public Transform pointB;
+    public Transform platformBody;
+ 
     private void Start()
     {
-        transform.DOMove(movingTarget.position, 5f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
+        platformBody.transform.position = pointA.position;
+        platformBody.transform.DOMove(pointB.position, 5f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
     }
 }
