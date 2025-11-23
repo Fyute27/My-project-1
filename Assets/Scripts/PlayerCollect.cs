@@ -12,11 +12,12 @@ public class PlayerCollect : MonoBehaviour
     {
         if (other.CompareTag("Apple"))
         {
-            
-            var appleGO = Instantiate(appleParticlePrefab, other.transform.position, Quaternion.identity);
-            var appleParticle = appleGO.GetComponent<ParticleSystem>();
+            var apple = other.GetComponent<Apple>();
+            AppleManager.instance.CollectApple(apple.id);
+            var appleParticleGO = Instantiate(appleParticlePrefab, other.transform.position, Quaternion.identity);
+            var appleParticle = appleParticleGO.GetComponent<ParticleSystem>();
             appleParticle.Play();
-            Destroy(appleGO, appleParticle.main.duration);
+            Destroy(appleParticleGO, appleParticle.main.duration);
             AudioManager.instance.PlaySfx(appleSound);
             
             GameManager.instance.apples++;

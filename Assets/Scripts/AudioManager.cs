@@ -26,11 +26,11 @@ public class AudioManager : MonoBehaviour
     public void PlayMusic(AudioClip clip)
     {
         musicSource.clip = clip;
-        musicSource.loop = true;
+        musicSource.loop = false;
         musicSource.Play();
     }
 
-    public void PlaySfx(AudioClip clip, float volume = 0.5f)
+    public void PlaySfx(AudioClip clip, float volume = 0.2f)
     {
         var sfxSourceObject = Instantiate(sfxSourcePrefab, transform);
         var sfxSource = sfxSourceObject.GetComponent<AudioSource>();
@@ -43,6 +43,7 @@ public class AudioManager : MonoBehaviour
         Destroy(sfxSourceObject, clip.length);
     }
     
+    
     public void StopMusic()
     {
         musicSource.Stop();
@@ -52,8 +53,5 @@ public class AudioManager : MonoBehaviour
     {
         musicSource.Play();
     }
-
-   
-    
     
 }

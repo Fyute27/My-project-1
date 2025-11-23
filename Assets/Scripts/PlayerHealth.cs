@@ -59,6 +59,18 @@ public class PlayerHealth : MonoBehaviour
             UIManager.instance.ShowGameOver();
             
         }
+        else if (other.CompareTag("Saw"))
+        {
+            SaveManager.instance.Die();
+            GameManager.instance.deaths++;
+            _playerController.canMove = false;
+            _animator.SetBool("isFalling", true);
+            _collider.enabled = false;
+            cam.Follow = null;
+            cam.Lens.OrthographicSize = 14;
+            UIManager.instance.ShowGameOver();
+            
+        }
     }
     
     
